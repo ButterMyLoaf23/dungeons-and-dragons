@@ -40,6 +40,11 @@ const themeToggle = document.getElementById("theme-toggle");
 const savedCharacters = document.getElementById("saved-characters");
 
 let unsavedChanges = false;
+let totalPoints = 10;
+let availablePoints = 10;
+const pointsRemaining = document.getElementById("points-remaining");
+const newCharBtn = document.getElementById("new");
+const toastContainer = document.getElementById("toast-container");
 
 
 function setupEventListeners() {
@@ -53,19 +58,36 @@ function setupEventListeners() {
     document.querySelectorAll(".increase").forEach(btn => {
         btn.addEventListener("click", e => {
             const input = e.target.parentElement.querySelector(".stat-value");
-            input.value = Math.min(30, parseInt(input.value) + 1);
-            input.dispatchEvent(new Event("input"));
+            let value = parseInt(input.value);
+            if (availablePoints > 0 && value < 30) {
+                input.value = value + 1;
+                availablePoints--;
+                updatePointsDisplay();
+                input.dispatchEvent(new Event("input"));
+            } else {
+                showToast("No points remaining", "warning");
+            }
         });
     });
 
     document.querySelectorAll(".decrease").forEach(btn => {
         btn.addEventListener("click", e => {
             const input = e.target.parentElement.querySelector(".stat-value");
-            input.value = Math.max(1, parseInt(input.value) - 1);
-            input.dispatchEvent(new Event("input"));
+            let value = parseInt(input.value);
+            if (value > 10) {
+                input.value = value - 1;
+                availablePoints++;
+                updatePointsDisplay
+                input.dispatchEvent(new Event("input"));
+            }
         });
     });
 
+    function updatePointsDisplay () {
+        pointsRemaining.textContent = `Points Remaining: ${availablePoints}`;
+    }
+
+    newCharBtn.addEventListener("click", newCharacter);
     saveBtn.addEventListener("click", saveCharacter);
     loadBtn.addEventListener("click", loadCharacter);
     deleteBtn.addEventListener("click", deleteCharacter);
@@ -119,12 +141,26 @@ function setCharacter(data) {
     inventoryInput.value = data.inventory || "";
 }
 
+function newCharacter() {
+    nameInput.value = "";
+    conceptInput.Value = "";
+    personalityInput.value = "";
+    backgroundInput.value = "";
+    inventoryInput.value = "";
+
+    document.querySelectorAll(".stat-value").forEach(input => input.value = 10);
+
+    availablePoints = totalPoints = 10;
+    updatePointsDisplay();
+    showToast("New character created!", "success")
+}
+
 function saveCharacter() {
     const charData = getCurrentCharacter();
     localStorage.setItem(`char_${charData.name}`, JSON.stringify(charData));
     loadSavedList();
     unsavedChanges = false;
-    alert(`Saved "${charData.name}"`);
+    showToast(`Saved "${charData.name}"`, "success");
 }
 
 function loadCharacter() {
@@ -140,7 +176,7 @@ function deleteCharacter() {
     if (!name) return;
     localStorage.removeItem(`char_${name}`);
     loadSavedList();
-    alert(`Deleted "${name}"`);
+    showToast(`Deleted "${name}"`, "error");
 }
 
 function loadSavedList() {
@@ -251,4 +287,16 @@ function restoreTheme() {
     } else {
         document.body.classList.remove("dark");
     }
+}
+
+function showToast(message, type = "success") {
+    const toast = document.createElement("div");
+    toast.classList.add("toast");
+    toast.textContent = message;
+    toastContainer.appendChild(toast);
+    setTimeout(() => toast.classList.add("show"), 100);
+    setTimeout(() => {
+        toast.classList.remove("show");
+        setTimeout(() => toast.remove(), 400);
+    }, 2500);
 }

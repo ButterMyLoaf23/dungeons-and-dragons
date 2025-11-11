@@ -1,0 +1,15 @@
+{
+  "name": "dungeons-and-dragons",
+  "version": "1.0.0",
+  "main": "character.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "jspdf": "^3.0.3"
+  }
+}

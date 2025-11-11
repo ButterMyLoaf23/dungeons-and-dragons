@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&D Character Builder</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <header>
+        <h1>D&D Character Builder</h1>
+        <button id="theme-toggle">Toggle Dark Mode</button>
+    </header>
+    <main>
+        <section id="character-info">
+            <label>Name: <input type="text" id="name" /></label>
+            <label>Concept/Role: <input type="text" id="concept" /></label>
+            <label>Main Skill: <input type="text" id="skill" /></label>
+        </section>
+
+        <section id="stats">
+            <h2>Attributes</h2>
+            <div class="stat" data-stat="Strength">
+                <span>Strength</span>
+                <button class="decrease">-</button>
+                <input type="number" class="stat-value" min="1" max="30" value="10" />
+                <button class="increase">+</button>
+            </div>
+            <div class="stat" data-stat="Dexterity">
+                <span>Dexterity</span>
+                <button class="decrease">-</button>
+                <input type="number" class="stat-value" min="1" max="30" value="10" />
+                <button class="increase">+</button>
+            </div>
+            <div class="stat" data-stat="Constitution">
+                <span>Constitution</span>
+                <button class="decrease">-</button>
+                <input type="number" class="stat-value" min="1" max="30" value="10" />
+                <button class="increase">+</button>
+            </div>
+            <div class="stat" data-stat="Intelligence">
+                <span>Intelligence</span>
+                <button class="decrease">-</button>
+                <input type="number" class="stat-value" min="1" max="30" value="10" />
+                <button class="increase">+</button>
+            </div>
+            <div class="stat" data-stat="Wisdom">
+                <span>Wisdom</span>
+                <button class="decrease">-</button>
+                <input type="number" class="stat-value" min="1" max="30" value="10" />
+                <button class="increase">+</button>
+            </div>
+            <div class="stat" data-stat="Charisma">
+                <span>Charisma</span>
+                <button class="decrease">-</button>
+                <input type="number" class="stat-value" min="1" max="30" value="10" />
+                <button class="increase">+</button>
+            </div>
+        </section>
+
+        <section id="notes">
+            <h2>Notes</h2>
+            <label>Personality: <textarea id="personality"></textarea></label>
+            <label>Background: <textarea id="background"></textarea></label>
+            <label>Inventory: <textarea id="inventory"></textarea></label>
+        </section>
+
+        <section id="save-controls">
+            <select id="saved-characters"></select>
+            <button id="save">Save Character</button>
+            <button id="load">Load Character</button>
+            <button id="delete">Delete Character</button>
+            <button id="export">Export Character</button>
+            <button id="import">Import Character</button>
+            <input type="file" id="file-input" style="display:none" />
+            <button id="pdf">Download PDF</button>
+        </section>
+    </main>
+    <script src="javascript/jspdf.umd.min.js"></script>
+    <script src="javascript/character.js"></script>
+</body>
+</html>

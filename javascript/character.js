@@ -64,7 +64,7 @@ function setupEventListeners() {
                 availablePoints--;
                 updatePointsDisplay();
                 input.dispatchEvent(new Event("input"));
-            } else {
+            } else if (availablePoints <= 0) {
                 showToast("No points remaining", "warning");
             }
         });
@@ -74,9 +74,11 @@ function setupEventListeners() {
         btn.addEventListener("click", e => {
             const input = e.target.parentElement.querySelector(".stat-value");
             let value = parseInt(input.value);
-            if (value > 10) {
+            if (value > 1) {
                 input.value = value - 1;
-                availablePoints++;
+                if (value <= 10) {
+                    availablePoints++;
+                }
                 updatePointsDisplay
                 input.dispatchEvent(new Event("input"));
             }
@@ -139,20 +141,25 @@ function setCharacter(data) {
     personalityInput.value = data.personality || "";
     backgroundInput.value = data.background || "";
     inventoryInput.value = data.inventory || "";
+
+    recalculatePoints();
 }
 
 function newCharacter() {
     nameInput.value = "";
     conceptInput.Value = "";
+    skillInput.value = "";
     personalityInput.value = "";
     backgroundInput.value = "";
     inventoryInput.value = "";
 
     document.querySelectorAll(".stat-value").forEach(input => input.value = 10);
 
-    availablePoints = totalPoints = 10;
+    totalPoints = 10;
+    availablePoints = 10;
     updatePointsDisplay();
     showToast("New character created!", "success")
+    recalculatePoints();
 }
 
 function saveCharacter() {
@@ -299,4 +306,15 @@ function showToast(message, type = "success") {
         toast.classList.remove("show");
         setTimeout(() => toast.remove(), 400);
     }, 2500);
+}
+
+function recalculatePoints() {
+    let used = 0;
+    document.querySelectorAll(".stat-value").forEach(input => {
+        const val =parseInt(input.value);
+        if (val > 10) used += val - 10;
+        else if (val < 10) used -= (10 - val);
+    });
+    availablePoints = Math.max(0, 10 - used);
+    updatePointsDisplay();
 }

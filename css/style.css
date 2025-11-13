@@ -129,6 +129,11 @@ button {
     text-align: right;
 }
 
+textarea {
+    resize:vertical;
+    min-height: 60px;
+}
+
 @media print {
     #theme-toggle, #save-controls, button {
         display: none;

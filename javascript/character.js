@@ -59,10 +59,10 @@ function setupEventListeners() {
         btn.addEventListener("click", e => {
             const input = e.target.parentElement.querySelector(".stat-value");
             let value = parseInt(input.value);
-            if (availablePoints > 0 && value < 30) {
+
+            if (value < 30) {
                 input.value = value + 1;
-                availablePoints--;
-                updatePointsDisplay();
+                recalculatePoints();
                 input.dispatchEvent(new Event("input"));
             } else if (availablePoints <= 0) {
                 showToast("No points remaining", "warning");
@@ -74,20 +74,14 @@ function setupEventListeners() {
         btn.addEventListener("click", e => {
             const input = e.target.parentElement.querySelector(".stat-value");
             let value = parseInt(input.value);
+
             if (value > 1) {
                 input.value = value - 1;
-                if (value <= 10) {
-                    availablePoints++;
-                }
-                updatePointsDisplay
+                recalculatePoints();
                 input.dispatchEvent(new Event("input"));
             }
         });
     });
-
-    function updatePointsDisplay () {
-        pointsRemaining.textContent = `Points Remaining: ${availablePoints}`;
-    }
 
     newCharBtn.addEventListener("click", newCharacter);
     saveBtn.addEventListener("click", saveCharacter);
@@ -147,7 +141,7 @@ function setCharacter(data) {
 
 function newCharacter() {
     nameInput.value = "";
-    conceptInput.Value = "";
+    conceptInput.value = "";
     skillInput.value = "";
     personalityInput.value = "";
     backgroundInput.value = "";
@@ -309,12 +303,21 @@ function showToast(message, type = "success") {
 }
 
 function recalculatePoints() {
-    let used = 0;
+    const base = 10;
+    let totalSpent = 0;
+
     document.querySelectorAll(".stat-value").forEach(input => {
-        const val =parseInt(input.value);
-        if (val > 10) used += val - 10;
-        else if (val < 10) used -= (10 - val);
+        const val = parseInt(input.value) || base;
+
+        totalSpent +=(val - base);
     });
-    availablePoints = Math.max(0, 10 - used);
+
+    availablePoints = totalPoints - totalAdjustment;
+    availablePoints = Math.max (0, Math.min(availablePoints, totalPoints));
     updatePointsDisplay();
 }
+
+ function updatePointsDisplay () {
+        const display = document.getElementById("points-remining");
+        if (display) display.textContent = `Points Remaining: ${availablePoints}`;
+    }
